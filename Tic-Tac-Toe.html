@@ -71,23 +71,23 @@
         }
 
         function playMove(event) {
-            const cell = event.target;
-            if (cell.textContent === '') {
-                cell.textContent = currentPlayer;
-                moves++;
+    const cell = event.target;
+    if (cell.textContent === '') {
+        cell.textContent = currentPlayer;
+        moves++;
 
-                if (checkWin(currentPlayer)) {
-                    alert(currentPlayer + ' wins!');
-                    location.reload();
-                } else if (moves === numRows * numCols) {
-                    alert('It\'s a draw!');
-                    location.reload();
-                } else {
-                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                    updateTurnDisplay();
-                }
-            }
+        if (checkWin(currentPlayer)) {
+            alert(currentPlayer + ' wins!');
+            location.reload();
+        } else if (moves === numRows * numCols) {
+            alert('It\'s a draw!');
+            location.reload();
+        } else {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            updateTurnDisplay();
         }
+    }
+}
 
         function checkWin(player) {
             const rows = document.querySelectorAll('#grid tr');
