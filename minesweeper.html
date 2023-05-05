@@ -7,7 +7,6 @@
     <style>
         table { border-collapse: collapse; }
         td { width: 30px; height: 30px; text-align: center; vertical-align: middle; border: 1px solid #ccc; font-weight: bold; }
-        .mine { background-color: red; }
         .revealed { background-color: #ddd; }
         .marked { background-color: yellow; }
     </style>
@@ -92,11 +91,11 @@
 
                     if (revealedCells === (numRows * numCols) - numMines) {
                         stopTimer();
-                                               alert('Congratulations! You have won the game!');
+                        alert('Congratulations! You have won the game!');
                         location.reload();
                     }
 
-                    if (count === 0) {
+                                       if (count === 0) {
                         revealNeighbors(row, col);
                     }
                 }
