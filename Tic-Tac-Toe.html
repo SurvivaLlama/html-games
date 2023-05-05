@@ -49,7 +49,67 @@
         <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
     <script>
-        // The existing Tic-Tac-Toe game code goes here
-    </script>
+        const numRows = 3;
+        const numCols = 3;
+        let currentPlayer = 'X';
+        let moves = 0;
+
+        function createGrid() {
+            const table = document.getElementById('grid');
+            for (let i = 0; i < numRows; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < numCols; j++) {
+                    const cell = document.createElement('td');
+                    cell.setAttribute('data-row', i);
+                    cell.setAttribute('data-col', j);
+                    cell.addEventListener('click', playMove);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+        }
+
+        function playMove(event) {
+            const cell = event.target;
+            if (cell.textContent === '') {
+                cell.textContent = currentPlayer;
+                moves++;
+
+                if (checkWin(currentPlayer)) {
+                    alert(currentPlayer + ' wins!');
+                    location.reload();
+                } else if (moves === numRows * numCols) {
+                    alert('It\'s a draw!');
+                    location.reload();
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWin(player) {
+            const rows = document.querySelectorAll('#grid tr');
+            for (let i = 0; i < numRows; i++) {
+                // Check row
+                if (Array.from(rows[i].children).every(cell => cell.textContent === player)) {
+                    return true;
+                }
+                // Check column
+                if (Array.from(rows).map(row => row.children[i]).every(cell => cell.textContent === player)) {
+                    return true;
+                }
+            }
+            // Check diagonals
+            if (Array.from(rows).every((row, i) => row.children[i].textContent === player)) {
+                return true;
+            }
+            if (Array.from(rows).every((row, i) => row.children[numCols - i - 1].textContent === player)) {
+            return true;
+        }
+        return false;
+    }
+
+    createGrid();
+</script>
 </body>
 </html>
