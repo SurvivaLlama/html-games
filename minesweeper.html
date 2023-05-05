@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <style>
+        table { border-collapse: collapse; }
+        td { width: 30px; height: 30px; text-align: center; vertical-align: middle; border: 1px solid #ccc; font-weight: bold; }
+        .mine { background-color: red; }
+        .revealed { background-color: #ddd; }
+        .marked { background-color: yellow; }
+    </style>
+</head>
+<body>
+    <h1>Minesweeper</h1>
+    <p>Mines remaining: <span id="mines-remaining">10</span></p>
+    <p>Time elapsed: <span id="time-elapsed">0</span> seconds</p>
+    <table id="grid" oncontextmenu="return false;"></table>
+    <script>
+        const numRows = 10;
+        const numCols = 10;
+        const numMines = 10;
+
+        let minesRemaining = numMines;
+        let revealedCells = 0;
+        let timer;
+        let timeElapsed = 0;
+
+        function createGrid() {
+            const table = document.getElementById('grid');
+            for (let i = 0; i < numRows; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < numCols; j++) {
+                    const cell = document.createElement('td');
+                    cell.setAttribute('data-row', i);
+                    cell.setAttribute('data-col', j);
+                    cell.addEventListener('click', revealCell);
+                    cell.addEventListener('contextmenu', markCell);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+        }
+
+        function placeMines() {
+            let minesPlaced = 0;
+            while (minesPlaced < numMines) {
+                const row = Math.floor(Math.random() * numRows);
+                const col = Math.floor(Math.random() * numCols);
+                const cell = getCell(row, col);
+                if (!cell.classList.contains('mine')) {
+                    cell.classList.add('mine');
+                    minesPlaced++;
+                }
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeElapsed++;
+                document.getElementById('time-elapsed').textContent = timeElapsed;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function updateMinesRemaining() {
+            document.getElementById('mines-remaining').textContent = minesRemaining;
+        }
+
+        function revealCell(event) {
+            if (!timer) {
+                startTimer();
+            }
+
+            const cell = event.target;
+            const row = parseInt(cell.getAttribute('data-row'));
+            const col = parseInt(cell.getAttribute('data-col'));
+            if (!cell.classList.contains('revealed') && !cell.classList.contains('marked')) {
+                if (cell.classList.contains('mine')) {
+                    stopTimer();
+                    alert('Game over! You hit a mine.');
+                    location.reload();
+                } else {
+                    const count = countMinesAround(row, col);
+                    cell.textContent = count > 0 ? count : '';
+                    cell.classList.add('revealed');
+                    revealedCells++;
+
+                    if (revealedCells === (numRows * numCols) - numMines) {
+                        stopTimer();
+                                               alert('Congratulations! You have won the game!');
+                        location.reload();
+                    }
+
+                    if (count === 0) {
+                        revealNeighbors(row, col);
+                    }
+                }
+            }
+        }
+
+        function markCell(event) {
+            event.preventDefault();
+            const cell = event.target;
+            if (!cell.classList.contains('revealed')) {
+                if (cell.classList.contains('marked')) {
+                    minesRemaining++;
+                } else {
+                    minesRemaining--;
+                }
+                cell.classList.toggle('marked');
+                updateMinesRemaining();
+            }
+        }
+
+        function getCell(row, col) {
+            return document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        }
+
+        function countMinesAround(row, col) {
+            let count = 0;
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < numRows && c >= 0 && c < numCols) {
+                        const cell = getCell(r, c);
+                        if (cell.classList.contains('mine')) {
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+
+        function revealNeighbors(row, col) {
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < numRows && c >= 0 && c < numCols) {
+                        const cell = getCell(r, c);
+                        if (!cell.classList.contains('revealed') && !cell.classList.contains('mine')) {
+                            revealCell({ target: cell });
+                        }
+                    }
+                }
+            }
+        }
+
+        createGrid();
+        placeMines();
+        updateMinesRemaining();
+    </script>
+</body>
+</html>
