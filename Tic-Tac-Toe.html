@@ -13,9 +13,19 @@
             min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
         h1 {
             margin-bottom: 20px;
+            animation: color-change 5s infinite;
+        }
+        @keyframes color-change {
+            0% { color: #f00; }
+            20% { color: #0f0; }
+            40% { color: #00f; }
+            60% { color: #f0f; }
+            80% { color: #0ff; }
+            100% { color: #f00; }
         }
         table {
             border-collapse: collapse;
@@ -28,14 +38,15 @@
             border: 1px solid #ccc;
             font-weight: bold;
             font-size: 24px;
-            background-color: #f0f0f0;
+            background-color: #fff;
             cursor: pointer;
         }
         td:hover {
             background-color: #e0e0e0;
         }
         button {
-            margin-top: 20px;
+            display: block;
+            margin: 20px auto 0;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
@@ -71,27 +82,27 @@
         }
 
         function playMove(event) {
-    const cell = event.target;
-    if (cell.textContent === '') {
-        cell.textContent = currentPlayer;
-        moves++;
+            const cell = event.target;
+            if (cell.textContent === '') {
+                cell.textContent = currentPlayer;
+                moves++;
 
-        if (checkWin(currentPlayer)) {
-            alert(currentPlayer + ' wins!');
-            location.reload();
-        } else if (moves === numRows * numCols) {
-            alert('It\'s a draw!');
-            location.reload();
-        } else {
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            updateTurnDisplay();
+                if (checkWin(currentPlayer)) {
+                    alert(currentPlayer + ' wins!');
+                    location.reload();
+                } else if (moves === numRows * numCols) {
+                    alert('It\'s a draw!');
+                    location.reload();
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    updateTurnDisplay();
+                }
+            }
         }
-    }
-}
 
         function checkWin(player) {
             const rows = document.querySelectorAll('#grid tr');
-            for (let i = 0; i < numRows; i++) {
+                        for (let i = 0; i < numRows; i++) {
                 // Check row
                 if (Array.from(rows[i].children).every(cell => cell.textContent === player)) {
                     return true;
@@ -105,8 +116,6 @@
             if (Array.from(rows).every((row, i) => row.children[i].textContent === player)) {
                 return true;
             }
-           tml
-
             if (Array.from(rows).every((row, i) => row.children[numCols - i - 1].textContent === player)) {
                 return true;
             }
