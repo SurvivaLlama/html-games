@@ -45,6 +45,7 @@
 <body>
     <div>
         <h1>Tic-Tac-Toe</h1>
+        <p id="turn">Player X's turn</p>
         <table id="grid" oncontextmenu="return false;"></table>
         <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
@@ -83,6 +84,7 @@
                     location.reload();
                 } else {
                     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    updateTurnDisplay();
                 }
             }
         }
@@ -103,13 +105,20 @@
             if (Array.from(rows).every((row, i) => row.children[i].textContent === player)) {
                 return true;
             }
-            if (Array.from(rows).every((row, i) => row.children[numCols - i - 1].textContent === player)) {
-            return true;
-        }
-        return false;
-    }
+           tml
 
-    createGrid();
-</script>
+            if (Array.from(rows).every((row, i) => row.children[numCols - i - 1].textContent === player)) {
+                return true;
+            }
+            return false;
+        }
+
+        function updateTurnDisplay() {
+            const turnDisplay = document.getElementById('turn');
+            turnDisplay.textContent = `Player ${currentPlayer}'s turn`;
+        }
+
+        createGrid();
+    </script>
 </body>
 </html>
