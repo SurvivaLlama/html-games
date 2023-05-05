@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
         table { border-collapse: collapse; }
         td { width: 30px; height: 30px; text-align: center; vertical-align: middle; border: 1px solid #ccc; font-weight: bold; }
         .revealed { background-color: #ddd; }
@@ -12,10 +20,12 @@
     </style>
 </head>
 <body>
-    <h1>Minesweeper</h1>
-    <p>Mines remaining: <span id="mines-remaining">10</span></p>
-    <p>Time elapsed: <span id="time-elapsed">0</span> seconds</p>
-    <table id="grid" oncontextmenu="return false;"></table>
+    <div>
+        <h1>Minesweeper</h1>
+        <p>Mines remaining: <span id="mines-remaining">10</span></p>
+        <p>Time elapsed: <span id="time-elapsed">0</span> seconds</p>
+        <table id="grid" oncontextmenu="return false;"></table>
+    </div>
     <script>
         const numRows = 10;
         const numCols = 10;
